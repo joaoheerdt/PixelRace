@@ -1,0 +1,17 @@
+<vehicle name="Fusca 1600">
+    <!-- Dimensões e pivôs -->
+    <dimensions width="340" height="150" wheelSize="67" />
+    <wheelPositions frontX="279" frontY="137" rearX="60" rearY="137" />
+
+    <!-- Física -->
+    <physics mass="800" baseTorque="150.0" maxRpm="5000.0" speedMax="110" />
+
+    <!-- Relação de Marchas: Ré, 1ª, 2ª, 3ª, 4ª -->
+    <gears ratios="1.0,3.8,2.0,1.2,0.9" />
+
+    <!-- Texturas (relativas à pasta do mod) -->
+    <textures body="FuscaVermelho.png" wheel="RodaFusca.png" />
+
+    <!-- Áudios (opcionais, relativos à pasta do mod) -->
+    <sounds start="sound/start.wav" stop="sound/stop.wav" idle="sound/idle.wav" run="soun/drun.wav" gear="sound/gear.wav" />
+</vehicle>
