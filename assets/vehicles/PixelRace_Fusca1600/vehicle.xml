@@ -13,5 +13,13 @@
     <textures body="FuscaVermelho.png" wheel="RodaFusca.png" />
 
     <!-- Áudios (opcionais, relativos à pasta do mod) -->
-    <sounds start="sound/start.wav" stop="sound/stop.wav" idle="sound/idle.wav" run="soun/drun.wav" gear="sound/gear.wav" />
+    <sounds start="sound/start.wav"
+            stop="sound/stop.wav"
+            gear="sound/gear.wav"
+            rpm1000="sound/rpm1000.wav"
+            rpm2000="sound/rpm2000.wav"
+            rpm3000="sound/rpm3000.wav"
+            rpm4000="sound/rpm4000.wav"
+            rpm5000="sound/rpm5000.wav"
+            />
 </vehicle>

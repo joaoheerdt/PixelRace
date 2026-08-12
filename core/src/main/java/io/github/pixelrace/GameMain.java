@@ -102,9 +102,10 @@ public class GameMain extends ApplicationAdapter implements InputProcessor {
         this.garageCars = VehicleLoader.loadAllMods();
         if (this.garageCars != null && !this.garageCars.isEmpty()) {
             this.activeVehicle = this.garageCars.get(currentCarIndex);
-            this.activeVehicle.setX(480);
-            this.activeVehicle.setY(480);
+            this.activeVehicle.setX(480f);
+            this.activeVehicle.setY(480f);
         }
+
 
         this.activeMap = new GameMap("map/default_map.png");
 
