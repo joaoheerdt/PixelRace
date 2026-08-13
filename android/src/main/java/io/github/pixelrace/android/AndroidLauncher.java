@@ -4,7 +4,7 @@ import android.os.Bundle;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
-import io.github.pixelrace.PixelRace;
+import io.github.pixelrace.GameMain;
 
 /** Launches the Android application. */
 public class AndroidLauncher extends AndroidApplication {
@@ -13,6 +13,6 @@ public class AndroidLauncher extends AndroidApplication {
         super.onCreate(savedInstanceState);
         AndroidApplicationConfiguration configuration = new AndroidApplicationConfiguration();
         configuration.useImmersiveMode = true; // Recommended, but not required.
-        initialize(new PixelRace(), configuration);
+        initialize(new GameMain(), configuration);
     }
 }

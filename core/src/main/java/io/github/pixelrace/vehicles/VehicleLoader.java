@@ -117,7 +117,6 @@ public class VehicleLoader {
                 }
             }
 
-            // Chamada colocada corretamente fora do loop for
             vehicle.setAudioPaths(start, stop, rpmSoundPaths, gear);
         }
 
