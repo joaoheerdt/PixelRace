@@ -18,11 +18,13 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import io.github.pixelrace.buttons.ConfigButton;
 import io.github.pixelrace.map.GameMap;
 import io.github.pixelrace.vehicles.Vehicle;
 import io.github.pixelrace.vehicles.VehicleLoader;
 
 import java.util.List;
+
 public class GameMain extends ApplicationAdapter implements InputProcessor {
 
     private static final int VIRTUAL_WIDTH = 1280;
@@ -35,7 +37,16 @@ public class GameMain extends ApplicationAdapter implements InputProcessor {
     private GameMap activeMap;
     private boolean isAccelerating = false, isBraking = false;
 
+    public boolean isBraking() {
+        return isBraking;
+    }
+
+    public boolean isAccelerating() {
+        return isAccelerating;
+    }
+
     private enum GameStage {MENU, GARAGE, PLAYING, PAUSED, CONFIG}
+
     private GameStage currentState = GameStage.MENU;
 
     private Music menuMusic;
@@ -46,19 +57,16 @@ public class GameMain extends ApplicationAdapter implements InputProcessor {
     private GlyphLayout layout;
     private Viewport viewport;
     private OrthographicCamera camera;
-
-    // Imagens
     private Texture menuBackground;
     private Texture garageBackground;
     private Texture menuConfigBackground;
     private Texture[] buttonImages;
 
-    // Coordenadas base dos botões do menu (convenção top-down, igual ao original)
     private Rectangle[] buttons = {
-            new Rectangle(490, 320, 300, 60), // 0: JOGAR
-            new Rectangle(50, 600, 60, 60),   // 1: CONFIGURAÇÕES
-            new Rectangle(515, 420, 250, 50), // 2: GARAGEM
-            new Rectangle(1170, 600, 60, 60)  // 3: SAIR
+        new Rectangle(490, 320, 300, 60), // 0: JOGAR
+        new Rectangle(50, 600, 60, 60),   // 1: CONFIGURAÇÕES
+        new Rectangle(515, 420, 250, 50), // 2: GARAGEM
+        new Rectangle(1170, 600, 60, 60)  // 3: SAIR
     };
 
     private final Rectangle btnContinuar = new Rectangle(515, 230, 250, 45);
@@ -70,14 +78,14 @@ public class GameMain extends ApplicationAdapter implements InputProcessor {
     private final Rectangle btnEfeitosMenos = new Rectangle(480, 540, 45, 40);
     private final Rectangle btnEfeitosMais = new Rectangle(755, 540, 45, 40);
 
-    // Botões da Garagem
     private final Rectangle btnCarroAnterior = new Rectangle(200, 400, 60, 60);
     private final Rectangle btnProximoCarro = new Rectangle(1020, 400, 60, 60);
     private final Rectangle btnSelecionarCarro = new Rectangle(520, 620, 240, 50);
-
+    private ConfigButton buttonsMobile;
     private int botaoPressionado = -1;
     private int volumeMusica = 80;
     private int volumeEfeitos = 80;
+
 
     @Override
     public void create() {
@@ -85,6 +93,7 @@ public class GameMain extends ApplicationAdapter implements InputProcessor {
         shapeRenderer = new ShapeRenderer();
         font = new BitmapFont();
         layout = new GlyphLayout();
+        buttonsMobile = new ConfigButton();
 
         camera = new OrthographicCamera();
         viewport = new ExtendViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, camera);
@@ -93,10 +102,10 @@ public class GameMain extends ApplicationAdapter implements InputProcessor {
         garageBackground = new Texture(Gdx.files.internal("menu/garage_background.png"));
         menuConfigBackground = new Texture(Gdx.files.internal("menu/fundo_menu_config.png"));
         buttonImages = new Texture[]{
-                new Texture(Gdx.files.internal("menu/play_button.png")),
-                new Texture(Gdx.files.internal("menu/config_button.png")),
-                new Texture(Gdx.files.internal("menu/garage_button.png")),
-                new Texture(Gdx.files.internal("menu/exit_button.png"))
+            new Texture(Gdx.files.internal("menu/play_button.png")),
+            new Texture(Gdx.files.internal("menu/config_button.png")),
+            new Texture(Gdx.files.internal("menu/garage_button.png")),
+            new Texture(Gdx.files.internal("menu/exit_button.png"))
         };
 
         this.garageCars = VehicleLoader.loadAllMods();
@@ -255,15 +264,29 @@ public class GameMain extends ApplicationAdapter implements InputProcessor {
     }
 
     @Override
-    public boolean keyTyped(char character) { return false; }
+    public boolean keyTyped(char character) {
+        return false;
+    }
+
     @Override
-    public boolean touchCancelled(int screenX, int screenY, int pointer, int button) { return false; }
+    public boolean touchCancelled(int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+
     @Override
-    public boolean touchDragged(int screenX, int screenY, int pointer) { return false; }
+    public boolean touchDragged(int screenX, int screenY, int pointer) {
+        return false;
+    }
+
     @Override
-    public boolean mouseMoved(int screenX, int screenY) { return false; }
+    public boolean mouseMoved(int screenX, int screenY) {
+        return false;
+    }
+
     @Override
-    public boolean scrolled(float amountX, float amountY) { return false; }
+    public boolean scrolled(float amountX, float amountY) {
+        return false;
+    }
 
     // ---------------------------------------------------------------
     // Render
@@ -290,6 +313,13 @@ public class GameMain extends ApplicationAdapter implements InputProcessor {
             batch.begin();
             if (activeMap != null) activeMap.draw(batch, virtualWidthAtual, VIRTUAL_HEIGHT);
             if (activeVehicle != null) activeVehicle.draw(batch, VIRTUAL_HEIGHT);
+
+            boolean clutchPressed = (activeVehicle != null) && activeVehicle.isClutchPressed();
+            if (currentState == GameStage.PLAYING && buttonsMobile != null) {
+                {
+                    buttonsMobile.drawButtons(batch, isAccelerating, isBraking, clutchPressed);
+                }
+            }
 
             if (activeVehicle != null) {
                 int currentGear = activeVehicle.getCurrentGear();
@@ -321,7 +351,7 @@ public class GameMain extends ApplicationAdapter implements InputProcessor {
             for (int i = 0; i < buttonImages.length; i++) {
                 float offset = (botaoPressionado == i) ? 4 : 0;
                 batch.draw(buttonImages[i], buttons[i].x, toDrawY(buttons[i].y + offset, buttons[i].height),
-                        buttons[i].width, buttons[i].height);
+                    buttons[i].width, buttons[i].height);
             }
             batch.end();
 
@@ -366,6 +396,7 @@ public class GameMain extends ApplicationAdapter implements InputProcessor {
                 font.setColor(Color.WHITE);
                 font.draw(batch, nomeCarro, boxX + paddingX, toDrawY(boxY, boxHeight) + boxHeight - paddingY);
                 batch.end();
+                batch.begin();
             }
 
             desenharBotaoMenu(btnCarroAnterior, "<", new Color(52 / 255f, 152 / 255f, 219 / 255f, 1f));
@@ -506,6 +537,8 @@ public class GameMain extends ApplicationAdapter implements InputProcessor {
         for (Texture t : buttonImages) t.dispose();
         if (activeMap != null) activeMap.dispose();
         if (garageCars != null) for (Vehicle v : garageCars) v.dispose();
+        if (menuMusic != null) menuMusic.dispose();
+        if (buttonsMobile != null) buttonsMobile.dispose();
         if (menuMusic != null) menuMusic.dispose();
     }
 }

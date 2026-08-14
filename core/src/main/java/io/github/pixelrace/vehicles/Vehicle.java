@@ -26,6 +26,8 @@ public class Vehicle {
     private EngineSound engineSound;
     private ManualClutch clutch = new ManualClutch();
 
+    private ManualClutch manualClutch;
+
     public Vehicle(String name, int width, int height, int wheelSize,
                    int frontWheelX, int frontWheelY, int rearWheelX, int rearWheelY,
                    double mass, double baseTorque, double maxRpm, double speedMax, double[] gearRatios,
@@ -61,6 +63,15 @@ public class Vehicle {
         return this.speed;
     }
 
+    public boolean isClutchPressed() {
+        if (manualClutch != null) {
+            return manualClutch.isClutchPressed();
+        }
+
+
+        return false;
+    }
+
     public void setSpeed(double speed) {
         this.speed = speed;
     }
@@ -75,6 +86,11 @@ public class Vehicle {
     public int getCurrentGear() {
         return this.currentGear;
     }
+
+    public ManualClutch getClutch() {
+        return clutch;
+    }
+
     public void setX(float x) {
         this.x = x;
     }

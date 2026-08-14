@@ -10,6 +10,7 @@ public class ManualClutch {
     public boolean isClutchPressed() {
         return isClutchPressed;
     }
+    
 
     public void updatePhysics(Vehicle vehicle, boolean isAccelerating, boolean isBraking) {
         this.isClutchPressed = Gdx.input.isKeyPressed(clutchKey);
