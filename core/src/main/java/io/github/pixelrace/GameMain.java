@@ -82,6 +82,7 @@ public class GameMain extends ApplicationAdapter implements InputProcessor {
     private final Rectangle btnProximoCarro = new Rectangle(1020, 400, 60, 60);
     private final Rectangle btnSelecionarCarro = new Rectangle(520, 620, 240, 50);
     private ConfigButton buttonsMobile;
+    private final ConfigButton.TouchState touchState = new ConfigButton.TouchState();
     private int botaoPressionado = -1;
     private int volumeMusica = 80;
     private int volumeEfeitos = 80;
@@ -294,6 +295,13 @@ public class GameMain extends ApplicationAdapter implements InputProcessor {
 
     @Override
     public void render() {
+        if (currentState == GameStage.PLAYING) {
+            // Processa os toques na tela e teclas através do ConfigButton
+            buttonsMobile.processInputs(viewport, activeVehicle, touchState);
+            this.isAccelerating = touchState.isAccelerating;
+            this.isBraking = touchState.isBraking;
+        }
+
         if (currentState == GameStage.PLAYING && activeVehicle != null) {
             activeVehicle.updatePhysics(isAccelerating, isBraking);
             activeMap.update(activeVehicle.getCurrentSpeed());
@@ -316,9 +324,7 @@ public class GameMain extends ApplicationAdapter implements InputProcessor {
 
             boolean clutchPressed = (activeVehicle != null) && activeVehicle.isClutchPressed();
             if (currentState == GameStage.PLAYING && buttonsMobile != null) {
-                {
-                    buttonsMobile.drawButtons(batch, isAccelerating, isBraking, clutchPressed);
-                }
+                buttonsMobile.drawButtons(batch, isAccelerating, isBraking, clutchPressed);
             }
 
             if (activeVehicle != null) {
@@ -396,7 +402,6 @@ public class GameMain extends ApplicationAdapter implements InputProcessor {
                 font.setColor(Color.WHITE);
                 font.draw(batch, nomeCarro, boxX + paddingX, toDrawY(boxY, boxHeight) + boxHeight - paddingY);
                 batch.end();
-                batch.begin();
             }
 
             desenharBotaoMenu(btnCarroAnterior, "<", new Color(52 / 255f, 152 / 255f, 219 / 255f, 1f));

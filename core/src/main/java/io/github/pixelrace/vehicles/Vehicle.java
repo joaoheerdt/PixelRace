@@ -26,7 +26,6 @@ public class Vehicle {
     private EngineSound engineSound;
     private ManualClutch clutch = new ManualClutch();
 
-    private ManualClutch manualClutch;
 
     public Vehicle(String name, int width, int height, int wheelSize,
                    int frontWheelX, int frontWheelY, int rearWheelX, int rearWheelY,
@@ -59,19 +58,17 @@ public class Vehicle {
     public boolean isEngineOn() {
         return isEngineOn;
     }
+
     public double getCurrentSpeed() {
         return this.speed;
     }
 
     public boolean isClutchPressed() {
-        if (manualClutch != null) {
-            return manualClutch.isClutchPressed();
+        if (clutch != null) {
+            return clutch.isClutchPressed();
         }
-
-
         return false;
     }
-
     public void setSpeed(double speed) {
         this.speed = speed;
     }
@@ -79,6 +76,7 @@ public class Vehicle {
     public double getCurrentRpm() {
         return this.currentRpm;
     }
+
     public void setCurrentRpm(double currentRpm) {
         this.currentRpm = currentRpm;
     }
